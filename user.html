@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h1>Admin Page</h1>
+    <form>
+      <input type="text" placeholder="enter name" id="name" />
+      <input type="number" placeholder="Enter price" id="price" />
+      <input type="text" id="image" placeholder="Enter image_url" />
+      <input type="submit" value="Submit" />
+    </form>
+    <br />
+    <button>Go to product page</button>
+  </body>
+</html>
+<script>
+  document.querySelector("form").addEventListener("submit", createProduct);
+  var productArr = JSON.parse(localStorage.getItem("productDatabase")) || [];
+  function createProduct(event) {
+    event.preventDefault();
+    var name = document.getElementById("name").value;
+    var price = document.getElementById("price").value;
+    var image = document.getElementById("image").value;
+
+    var productData = {
+      name: name,
+      price: price,
+      image_url: image,
+    };
+    productArr.push(productData);
+    localStorage.setItem("productDatabase", JSON.stringify(productArr));
+  }
+  document.querySelector("button").addEventListener("click", function () {
+    window.location.href = "product.html";
+  });
+</script>

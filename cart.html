@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      #container {
+        display: flex;
+        gap: 20px;
+        flex-wrap: wrap;
+      }
+      #containerFirst {
+        display: flex;
+        justify-content: space-around;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Added Products</h1>
+    <h2>Use promo code = "masai30" for 30% discount.</h2>
+    <input type="text" id="promoCode" placeholder="Enter PromoCode" />
+    <button>Apply promoCode</button>
+
+    <div id="containerFirst">
+      <h2>Total item = <span></span></h2>
+
+      <h2>Total cost = <span></span></h2>
+    </div>
+    <div id="container"></div>
+    <button id="checkOut">Checkout</button>
+  </body>
+</html>
+<script>
+  var addProduct = JSON.parse(localStorage.getItem("productAdded")) || [];
+  displayCart(addProduct);
+
+  function displayCart(addProduct) {
+    var sum = 0;
+
+    for (var i = 0; i < addProduct.length; i++) {
+      sum += Number(addProduct[i].price);
+    }
+    document.querySelectorAll("span")[1].textContent = sum;
+    document.querySelector("button").addEventListener("click", promoCode);
+    function promoCode() {
+      var promo = document.getElementById("promoCode").value;
+      if (promo == "masai30") {
+        var promo = (document.getElementById("promoCode").value = "");
+
+        sum = sum - (sum * 30) / 100;
+      }
+      document.querySelectorAll("span")[1].textContent = sum;
+    }
+
+    document.getElementById("container").textContent = "";
+    document.querySelector("span").textContent = addProduct.length;
+
+    addProduct.map(function (elem, index) {
+      var div = document.createElement("div");
+      var img = document.createElement("img");
+      img.setAttribute("src", elem.image_url);
+      var h2 = document.createElement("h2");
+      h2.textContent = elem.name;
+      var price = document.createElement("p");
+      price.textContent = elem.price;
+      var btn = document.createElement("button");
+      btn.textContent = "Delete Item";
+      btn.addEventListener("click", function () {
+        deleteCartItem(index);
+      });
+
+      div.append(img, h2, price, btn);
+
+      document.getElementById("container").append(div);
+    });
+  }
+
+  function deleteCartItem(index) {
+    addProduct.splice(index, 1);
+    localStorage.setItem("productAdded", JSON.stringify(addProduct));
+    displayCart(addProduct);
+  }
+ 
+  document.getElementById("checkOut").addEventListener("click",checkOut);
+  function checkOut() {
+   window.location.href = "success.html";
+
+  }
+</script>
